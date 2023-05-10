@@ -9,32 +9,20 @@ import java.util.Scanner;
 
 public class BytebankApplication {
 
-    private static ContaService service = new ContaService();
-    private static Scanner teclado = new Scanner(System.in).useDelimiter("\n");
+    private static final ContaService service = new ContaService();
+    private static final Scanner teclado = new Scanner(System.in).useDelimiter("\n");
 
     public static void main(String[] args) {
         var opcao = exibirMenu();
         while (opcao != 7) {
             try {
                 switch (opcao) {
-                    case 1:
-                        listarContas();
-                        break;
-                    case 2:
-                        abrirConta();
-                        break;
-                    case 3:
-                        encerrarConta();
-                        break;
-                    case 4:
-                        consultarSaldo();
-                        break;
-                    case 5:
-                        realizarSaque();
-                        break;
-                    case 6:
-                        realizarDeposito();
-                        break;
+                    case 1 -> listarContas();
+                    case 2 -> abrirConta();
+                    case 3 -> encerrarConta();
+                    case 4 -> consultarSaldo();
+                    case 5 -> realizarSaque();
+                    case 6 -> realizarDeposito();
                 }
             } catch (RegraDeNegocioException e) {
                 System.out.println("Erro: " +e.getMessage());
@@ -64,7 +52,7 @@ public class BytebankApplication {
     private static void listarContas() {
         System.out.println("Contas cadastradas:");
         var contas = service.listarContasAbertas();
-        contas.stream().forEach(System.out::println);
+        contas.forEach(System.out::println);
 
         System.out.println("Pressione qualquer tecla e de ENTER para voltar ao menu principal");
         teclado.next();
