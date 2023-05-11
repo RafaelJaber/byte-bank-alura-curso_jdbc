@@ -26,7 +26,8 @@ public class ContaService {
 
     public BigDecimal consultarSaldo(Integer numeroDaConta) {
         var conta = buscarContaPorNumero(numeroDaConta);
-        return conta.getSaldo();
+        if (conta != null) return conta.getSaldo();
+        throw new RuntimeException("Conta inválida");
     }
 
     public void abrir(DadosAberturaConta dadosDaConta) {
@@ -66,10 +67,13 @@ public class ContaService {
     }
 
     private Conta buscarContaPorNumero(Integer numero) {
-        return contas
-                .stream()
-                .filter(c -> c.getNumero() == numero)
-                .findFirst()
-                .orElseThrow(() -> new RegraDeNegocioException("Não existe conta cadastrada com esse número!"));
+        Connection conn = connection.recuperarConexao();
+        return new ContaDAO(conn).listarPorNumero(numero);
+
+        //return contas
+        //        .stream()
+        //        .filter(c -> c.getNumero() == numero)
+        //        .findFirst()
+        //        .orElseThrow(() -> new RegraDeNegocioException("Não existe conta cadastrada com esse número!"));
     }
 }

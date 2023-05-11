@@ -68,4 +68,38 @@ public class ContaDAO {
             throw new RuntimeException(e);
         }
     }
+
+    public Conta listarPorNumero(Integer numero) {
+        String sql = "SELECT * FROM conta WHERE numero = ?";
+
+        PreparedStatement ps;
+        ResultSet rs;
+        Conta conta = null;
+
+        try {
+            ps = this.conn.prepareStatement(sql);
+            ps.setInt(1, numero);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Integer numeroRecuperado = rs.getInt(1);
+                BigDecimal saldo = rs.getBigDecimal(2);
+                String nome = rs.getString(3);
+                String cpf = rs.getString(4);
+                String email = rs.getString(5);
+
+                DadosCadastroCliente dadosCadastroCliente =
+                        new DadosCadastroCliente(nome, cpf, email);
+                Cliente cliente = new Cliente(dadosCadastroCliente);
+
+                conta = new Conta(numeroRecuperado, saldo, cliente);
+            }
+            rs.close();
+            ps.close();
+            conn.close();
+            return conta;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
