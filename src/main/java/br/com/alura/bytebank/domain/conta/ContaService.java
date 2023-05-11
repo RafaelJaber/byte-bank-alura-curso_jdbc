@@ -46,7 +46,8 @@ public class ContaService {
         }
 
         Connection conn = connection.recuperarConexao();
-        new ContaDAO(conn).alterarSaldo(conta.getNumero(), valor);
+        BigDecimal valorAtual = conta.getSaldo().subtract(valor);
+        new ContaDAO(conn).alterarSaldo(conta.getNumero(), valorAtual);
     }
 
     public void realizarDeposito(Integer numeroDaConta, BigDecimal valor) {
@@ -66,6 +67,19 @@ public class ContaService {
         }
 
         contas.remove(conta);
+    }
+
+    public void realizarTransferencia(Integer numeroDaContaOrigem, Integer numeroDaContaDestino, BigDecimal valor) {
+        Conta contaO = buscarContaPorNumero(numeroDaContaOrigem);
+        Conta contaD = buscarContaPorNumero(numeroDaContaDestino);
+
+        if (contaO != null && contaD != null) {
+            this.realizarSaque(numeroDaContaOrigem, valor);
+            this.realizarDeposito(numeroDaContaDestino, valor);
+        } else {
+            throw new RegraDeNegocioException("Uma ou mais conta informada, não foram localizadas.");
+        }
+
     }
 
     private Conta buscarContaPorNumero(Integer numero) {
