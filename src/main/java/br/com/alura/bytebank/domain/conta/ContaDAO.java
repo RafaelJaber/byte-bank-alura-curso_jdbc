@@ -36,6 +36,7 @@ public class ContaDAO {
             preparedStatement.setString(5, cliente.getEmail());
 
             preparedStatement.execute();
+            preparedStatement.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -60,6 +61,8 @@ public class ContaDAO {
                 Cliente cliente = new Cliente(dadosCadastroCliente);
                 contas.add(new Conta(numero, cliente));
             }
+            resultSet.close();
+            ps.close();
             return contas;
         } catch (SQLException e) {
             throw new RuntimeException(e);
