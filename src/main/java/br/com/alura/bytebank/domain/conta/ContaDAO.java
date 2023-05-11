@@ -37,6 +37,7 @@ public class ContaDAO {
 
             preparedStatement.execute();
             preparedStatement.close();
+            conn.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -63,6 +64,7 @@ public class ContaDAO {
             }
             resultSet.close();
             ps.close();
+            conn.close();
             return contas;
         } catch (SQLException e) {
             throw new RuntimeException(e);
