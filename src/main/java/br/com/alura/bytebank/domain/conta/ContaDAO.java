@@ -21,7 +21,7 @@ public class ContaDAO {
 
     public void salvar(DadosAberturaConta dadosDaConta) {
         var cliente = new Cliente(dadosDaConta.dadosCliente());
-        var conta = new Conta(dadosDaConta.numero(), cliente);
+        var conta = new Conta(dadosDaConta.numero(), cliente, true);
 
         String sql = "INSERT INTO conta (numero, saldo, cliente_nome, cliente_cpf, cliente_email)" +
                 " VALUES (?, ?, ?, ?, ?)";
@@ -45,7 +45,7 @@ public class ContaDAO {
 
     public Set<Conta> listar() {
         Set<Conta> contas = new HashSet<>();
-        String sql = "SELECT * FROM conta";
+        String sql = "SELECT * FROM conta WHERE esta_ativa = true";
 
         try {
             PreparedStatement ps = this.conn.prepareStatement(sql);
@@ -106,6 +106,22 @@ public class ContaDAO {
         }
     }
 
+    public void deletarLogico(Integer numero) {
+        PreparedStatement ps;
+        String sql = "UPDATE conta SET esta_ativa = false WHERE numero = ?";
+
+        try {
+            ps = this.conn.prepareStatement(sql);
+            ps.setInt(1, numero);
+
+            ps.execute();
+            ps.close();
+            conn.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void deletar(Integer numero) {
         PreparedStatement ps;
         String sql = "DELETE FROM conta WHERE numero = ?";
@@ -130,12 +146,13 @@ public class ContaDAO {
             String nome = rs.getString(3);
             String cpf = rs.getString(4);
             String email = rs.getString(5);
+            boolean estaAtiva = rs.getBoolean(6);
 
             DadosCadastroCliente dadosCadastroCliente =
                     new DadosCadastroCliente(nome, cpf, email);
             Cliente cliente = new Cliente(dadosCadastroCliente);
 
-            return new Conta(numeroRecuperado, saldo, cliente);
+            return new Conta(numeroRecuperado, saldo, cliente, estaAtiva);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

@@ -1033,12 +1033,17 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <DasType>varchar(50)|0s</DasType>
       <Position>5</Position>
     </column>
-    <index id="308" parent="302" name="PRIMARY">
+    <column id="308" parent="302" name="esta_ativa">
+      <DasType>tinyint(1)|0s</DasType>
+      <DefaultExpression>1</DefaultExpression>
+      <Position>6</Position>
+    </column>
+    <index id="309" parent="302" name="PRIMARY">
       <ColNames>numero</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="309" parent="302" name="PRIMARY">
+    <key id="310" parent="302" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
