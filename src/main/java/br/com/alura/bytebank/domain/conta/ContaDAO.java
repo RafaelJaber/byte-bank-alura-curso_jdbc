@@ -106,6 +106,23 @@ public class ContaDAO {
         }
     }
 
+    public void deletar(Integer numero) {
+        PreparedStatement ps;
+        String sql = "DELETE FROM conta WHERE numero = ?";
+
+        try {
+            ps = this.conn.prepareStatement(sql);
+            ps.setInt(1, numero);
+
+            ps.execute();
+
+            ps.close();
+            conn.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private Conta criarObjeto(ResultSet rs) {
         try {
             Integer numeroRecuperado = rs.getInt(1);
