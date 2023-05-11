@@ -27,7 +27,7 @@ public class ContaService {
     public BigDecimal consultarSaldo(Integer numeroDaConta) {
         var conta = buscarContaPorNumero(numeroDaConta);
         if (conta != null) return conta.getSaldo();
-        throw new RuntimeException("Conta inválida");
+        throw new RegraDeNegocioException("Conta inválida");
     }
 
     public void abrir(DadosAberturaConta dadosDaConta) {

@@ -52,15 +52,7 @@ public class ContaDAO {
             ResultSet resultSet = ps.executeQuery();
 
             while (resultSet.next()) {
-                Integer numero = resultSet.getInt(1);
-                BigDecimal saldo = resultSet.getBigDecimal(2);
-                String nome = resultSet.getString(3);
-                String cpf = resultSet.getString(4);
-                String email = resultSet.getString(5);
-                DadosCadastroCliente dadosCadastroCliente =
-                        new DadosCadastroCliente(nome, cpf, email);
-                Cliente cliente = new Cliente(dadosCadastroCliente);
-                contas.add(new Conta(numero, saldo, cliente));
+                contas.add(this.criarObjeto(resultSet));
             }
             resultSet.close();
             ps.close();
@@ -84,17 +76,7 @@ public class ContaDAO {
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                Integer numeroRecuperado = rs.getInt(1);
-                BigDecimal saldo = rs.getBigDecimal(2);
-                String nome = rs.getString(3);
-                String cpf = rs.getString(4);
-                String email = rs.getString(5);
-
-                DadosCadastroCliente dadosCadastroCliente =
-                        new DadosCadastroCliente(nome, cpf, email);
-                Cliente cliente = new Cliente(dadosCadastroCliente);
-
-                conta = new Conta(numeroRecuperado, saldo, cliente);
+                conta = criarObjeto(rs);
             }
             rs.close();
             ps.close();
@@ -119,6 +101,24 @@ public class ContaDAO {
             ps.close();
             conn.close();
 
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Conta criarObjeto(ResultSet rs) {
+        try {
+            Integer numeroRecuperado = rs.getInt(1);
+            BigDecimal saldo = rs.getBigDecimal(2);
+            String nome = rs.getString(3);
+            String cpf = rs.getString(4);
+            String email = rs.getString(5);
+
+            DadosCadastroCliente dadosCadastroCliente =
+                    new DadosCadastroCliente(nome, cpf, email);
+            Cliente cliente = new Cliente(dadosCadastroCliente);
+
+            return new Conta(numeroRecuperado, saldo, cliente);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
