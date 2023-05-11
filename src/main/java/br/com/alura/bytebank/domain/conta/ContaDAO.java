@@ -59,7 +59,7 @@ public class ContaDAO {
                 DadosCadastroCliente dadosCadastroCliente =
                         new DadosCadastroCliente(nome, cpf, email);
                 Cliente cliente = new Cliente(dadosCadastroCliente);
-                contas.add(new Conta(numero, cliente));
+                contas.add(new Conta(numero, saldo, cliente));
             }
             resultSet.close();
             ps.close();
